@@ -1,0 +1,30 @@
+﻿<Window x:Class="SuperFunkyChat.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Super Funky Chat!!11!" Height="366" Width="537" Loaded="Window_Loaded" ResizeMode="CanResize" Icon="/SuperFunkyChat;component/FavoriteStar_FrontFacing_48x48_72.png" Closed="Window_Closed">
+    <DockPanel LastChildFill="True">
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="File">                
+                <MenuItem x:Name="menuItemFileSendImage"  Header="Send Image" Click="menuItemFileSendImage_Click" />
+                <MenuItem x:Name="menuItemFileSendFile" Header="Send File" Click="menuItemFileSendFile_Click" />
+                <MenuItem x:Name="menuItemFileGetUserList" Header="Get User List" Click="menuItemFileGetUserList_Click" />
+                <MenuItem x:Name="menuItemFileCheckForUpdate" Header="Check For Update" Click="menuItemFileCheckForUpdate_Click" />
+                <MenuItem x:Name="menuItemFileSaveConfig" Header="Save Configuration" Click="menuItemFileSaveConfig_Click"/>
+                <MenuItem x:Name="menuItemFileExit"  Header="Exit" Click="menuItemFileExit_Click" />
+            </MenuItem>
+            <MenuItem Header="Log">
+                <MenuItem x:Name="menuItemLogClear" Header="Clear" Click="MenuItem_Click" />
+            </MenuItem>
+        </Menu>
+        
+        <DockPanel DockPanel.Dock="Bottom" LastChildFill="True">
+            <Button DockPanel.Dock="Right" Content="Send" Name="btnSend" IsDefault="True" Click="btnSend_Click" FontSize="20" Margin="5"/>
+            <TextBox Name="textBoxLine" VerticalAlignment="Bottom" FontSize="20" Margin="5"/>            
+        </DockPanel>
+        <FlowDocumentScrollViewer x:Name="flowDocumentScrollViewer" Height="Auto">
+            <FlowDocument x:Name="flowDocument">            
+            </FlowDocument>
+        </FlowDocumentScrollViewer>
+    
+    </DockPanel>
+</Window>
