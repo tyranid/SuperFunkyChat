@@ -38,13 +38,11 @@ namespace SuperFunkyChat
     {
         private string _userName;
         private ChatConnection _conn;
-        private ManualResetEvent _closeEvent;
         private ClientConfiguration _config;
 
         public MainWindow()
         {
             InitializeComponent();
-            _closeEvent = new ManualResetEvent(false);
         }
 
         private void ScrollToEnd()
@@ -156,12 +154,23 @@ namespace SuperFunkyChat
                 catch (Exception ex)
                 {
                     MessageBox.Show(this, ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    Close();
                 }
             }
         }
 
-        private void HandlePacket(ChatConnection conn, ProtocolPacket packet)
+        private void UpdateConnection(ChatConnection conn)
+        {
+            if (this.Dispatcher.CheckAccess())
+            {
+                _conn = conn;
+            }
+            else
+            {
+                this.Dispatcher.Invoke(new Action<ChatConnection>(UpdateConnection), conn);
+            }
+        }
+
+        private void HandlePacket(ProtocolPacket packet)
         {
             if (this.Dispatcher.CheckAccess())
             {
@@ -244,7 +253,7 @@ namespace SuperFunkyChat
             }
             else
             {
-                this.Dispatcher.Invoke(new Action<ChatConnection, ProtocolPacket>(HandlePacket), conn, packet);
+                this.Dispatcher.Invoke(new Action<ProtocolPacket>(HandlePacket), packet);
             }
         }
 
@@ -260,13 +269,14 @@ namespace SuperFunkyChat
                     {
                         while (true)
                         {
-                            HandlePacket(conn, conn.ReadPacket());
+                            HandlePacket(conn.ReadPacket());
                         }
                     }
                     catch
                     {
                         conn = null;
-                        HandlePacket(null, new GoodbyeProtocolPacket("Connection Closed :("));
+                        UpdateConnection(null);
+                        HandlePacket(new GoodbyeProtocolPacket("Connection Closed :("));
                     }
                 }
 
@@ -275,6 +285,7 @@ namespace SuperFunkyChat
                 try
                 {
                     conn = DoConnect(_config);
+                    UpdateConnection(conn);
                 }
                 catch (ThreadAbortException)
                 {
@@ -323,7 +334,7 @@ namespace SuperFunkyChat
                 }
                 else
                 {
-                    HandlePacket(conn, packet);
+                    HandlePacket(packet);
                 }
             }
             catch (Exception ex)
@@ -424,7 +435,6 @@ namespace SuperFunkyChat
 
         private void menuItemFileExit_Click(object sender, RoutedEventArgs e)
         {
-            _closeEvent.Set();
             this.Close();
         }
 
@@ -486,7 +496,6 @@ namespace SuperFunkyChat
             catch (Exception ex)
             {
                 MessageBox.Show(this, ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                Close();
             }
         }
 
