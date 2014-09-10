@@ -318,7 +318,7 @@ namespace SuperFunkyChat
                         config.EnableSsl);
                 }
 
-                conn.WritePacket(new HelloProtocolPacket(_userName, Environment.MachineName, config.SupportsSecurityUpgrade));
+                conn.WritePacket(new HelloProtocolPacket(_userName, Environment.MachineName, config.SupportsSecurityUpgrade, 0));
 
                 ProtocolPacket packet = conn.ReadPacket(3000);
 
@@ -326,14 +326,16 @@ namespace SuperFunkyChat
                 {
                     throw new EndOfStreamException(((GoodbyeProtocolPacket)packet).Message);
                 }
-                else if (packet is UpgradeSecurityProtocolPacket)
-                {
-                    UpgradeSecurityProtocolPacket p = packet as UpgradeSecurityProtocolPacket;
-
-                    conn.UpgradeSecurity(p.XorKey);
-                }
                 else
                 {
+                    HelloProtocolPacket p = packet as HelloProtocolPacket;
+                    if (p != null)
+                    {
+                        if (p.SupportsSecurityUpgrade)
+                        {
+                            conn.UpgradeSecurity(p.XorKey);
+                        }
+                    }
                     HandlePacket(packet);
                 }
             }

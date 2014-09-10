@@ -58,7 +58,6 @@
     <Compile Include="SendFileProtocolPacket.cs" />
     <Compile Include="SendUpdateProtocolPacket.cs" />
     <Compile Include="TargetProtocolPacket.cs" />
-    <Compile Include="UpgradeSecurityProtocolPacket.cs" />
     <Compile Include="UserListProtocolPacket.cs" />
     <Compile Include="XorStream.cs" />
   </ItemGroup>

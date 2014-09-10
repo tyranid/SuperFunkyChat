@@ -31,7 +31,6 @@ namespace SuperFunkyChatProtocol
         Target,
         GetUserList,
         UserList,
-        UpgradeSecurity,
     }
 
     public abstract class ProtocolPacket
@@ -66,8 +65,6 @@ namespace SuperFunkyChatProtocol
                     return new SendUpdateProtocolPacket(data);
                 case ProtocolCommandId.SendFile:
                     return new SendFileProtocolPacket(data);
-                case ProtocolCommandId.UpgradeSecurity:
-                    return new UpgradeSecurityProtocolPacket(data);
                 default:
                     throw new ArgumentException("Invalid command code");
             }

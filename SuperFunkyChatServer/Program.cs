@@ -141,14 +141,20 @@ namespace SuperFunkyChatServer
                                             _rand.NextBytes(randkey);
 
                                             Console.WriteLine("Upgrading to super secure mode (key {0})", randkey[0]);
-                                            UpgradeSecurityProtocolPacket security = new UpgradeSecurityProtocolPacket(randkey[0]);
+                                            hello.XorKey = randkey[0];
 
-                                            new DataPacket(security.GetData()).WriteTo(ent.Writer);
+                                            HelloProtocolPacket new_hello = new HelloProtocolPacket(hello.GetData());
+
+                                            new DataPacket(new_hello.GetData()).WriteTo(ent.Writer);
 
                                             ent.Stream.XorKey = randkey[0];
                                         }
-
-                                        _packets.Enqueue(new DataPacketEntry() { Data = packet, Connection = null });
+                                        else
+                                        {
+                                            new DataPacket(hello.GetData()).WriteTo(ent.Writer);
+                                        }
+                                        
+                                        _packets.Enqueue(new DataPacketEntry() { Data = packet, Connection = ent });
                                     }
 
                                     break;

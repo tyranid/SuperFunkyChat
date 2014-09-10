@@ -24,6 +24,7 @@ namespace SuperFunkyChatProtocol
         public string UserName { get; set; }
         public string HostName { get; set; }
         public bool SupportsSecurityUpgrade { get; set; }
+        public byte XorKey { get; set; }
 
         public override byte[] GetData()
         {
@@ -35,6 +36,10 @@ namespace SuperFunkyChatProtocol
             writer.Write(UserName);
             writer.Write(HostName);
             writer.Write(SupportsSecurityUpgrade);
+            if (SupportsSecurityUpgrade)
+            {
+                writer.Write(XorKey);
+            }
 
             return stm.ToArray();
         }
@@ -48,13 +53,18 @@ namespace SuperFunkyChatProtocol
             UserName = reader.ReadString();
             HostName = reader.ReadString();
             SupportsSecurityUpgrade = reader.ReadBoolean();
+            if (SupportsSecurityUpgrade)
+            {
+                XorKey = reader.ReadByte();
+            }
         }
 
-        public HelloProtocolPacket(string userName, string hostName, bool supportsSecurityUpgrade)
+        public HelloProtocolPacket(string userName, string hostName, bool supportsSecurityUpgrade, byte xorkey)
         {
             UserName = userName;
             HostName = hostName;
             SupportsSecurityUpgrade = supportsSecurityUpgrade;
+            XorKey = xorkey;
         }
     }
 }
