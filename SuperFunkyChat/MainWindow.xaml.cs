@@ -306,38 +306,22 @@ namespace SuperFunkyChat
 
             try
             {
+                ProtocolPacket firstPacket;
+                conn = new ChatConnection();                
+
                 if (config.SocksEnabled)
                 {
-                    conn = new ChatConnection(config.Host, config.Port,
+                    firstPacket = conn.Connect(config.Host, config.Port,
                         config.EnableSsl, config.SocksHost,
-                        config.SocksPort);
+                        config.SocksPort, _userName, config.SupportsSecurityUpgrade);
                 }
                 else
                 {
-                    conn = new ChatConnection(config.Host, config.Port,
-                        config.EnableSsl);
+                    firstPacket = conn.Connect(config.Host, config.Port,
+                        config.EnableSsl, _userName, config.SupportsSecurityUpgrade);
                 }
-
-                conn.WritePacket(new HelloProtocolPacket(_userName, Environment.MachineName, config.SupportsSecurityUpgrade, 0));
-
-                ProtocolPacket packet = conn.ReadPacket(3000);
-
-                if (packet is GoodbyeProtocolPacket)
-                {
-                    throw new EndOfStreamException(((GoodbyeProtocolPacket)packet).Message);
-                }
-                else
-                {
-                    HelloProtocolPacket p = packet as HelloProtocolPacket;
-                    if (p != null)
-                    {
-                        if (p.SupportsSecurityUpgrade)
-                        {
-                            conn.UpgradeSecurity(p.XorKey);
-                        }
-                    }
-                    HandlePacket(packet);
-                }
+                
+                HandlePacket(firstPacket);
             }
             catch (Exception ex)
             {

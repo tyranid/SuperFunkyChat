@@ -43,7 +43,7 @@ namespace SuperFunkyChatProtocol
             return true;
         }
 
-        private void DoConnect(TcpClient client, string hostname, bool ssl)
+        private ProtocolPacket DoConnect(TcpClient client, string hostname, bool ssl, string username, bool supportsUpgrade)
         {
             Stream stm;
 
@@ -70,6 +70,28 @@ namespace SuperFunkyChatProtocol
             _baseStream = new XorStream(stm);
             _writer = new BinaryWriter(_baseStream);
             _reader = new BinaryReader(_baseStream);
+
+            WritePacket(new HelloProtocolPacket(username, Environment.MachineName, supportsUpgrade, 0));
+
+            ProtocolPacket packet = ReadPacket(3000);
+
+            if (packet is GoodbyeProtocolPacket)
+            {
+                throw new EndOfStreamException(((GoodbyeProtocolPacket)packet).Message);
+            }
+            else
+            {
+                HelloProtocolPacket p = packet as HelloProtocolPacket;
+                if (p != null)
+                {
+                    if (p.SupportsSecurityUpgrade)
+                    {
+                        UpgradeSecurity(p.XorKey);
+                    }
+                }
+
+                return packet;
+            }
         }
 
         public void UpgradeSecurity(byte xorkey)
@@ -79,6 +101,13 @@ namespace SuperFunkyChatProtocol
 
         private static IPAddress GetHostIP(string hostname)
         {
+            IPAddress hostaddr;
+
+            if (IPAddress.TryParse(hostname, out hostaddr))
+            {
+                return hostaddr;
+            }   
+
             IPHostEntry ent = Dns.GetHostEntry(hostname);
 
             foreach (IPAddress addr in ent.AddressList)
@@ -157,14 +186,14 @@ namespace SuperFunkyChatProtocol
             return client;
         }
 
-        public ChatConnection(string hostname, int port, bool ssl)
+        public ProtocolPacket Connect(string hostname, int port, bool ssl, string username, bool supportsUpgrade)
         {
-            DoConnect(Connect(hostname, ssl ? port+1 : port), hostname, ssl);            
+            return DoConnect(Connect(hostname, ssl ? port+1 : port), hostname, ssl, username, supportsUpgrade);            
         }
 
-        public ChatConnection(string hostname, int port, bool ssl, string proxyaddr, int proxyport)
+        public ProtocolPacket Connect(string hostname, int port, bool ssl, string proxyaddr, int proxyport, string username, bool supportsUpgrade)
         {
-            DoConnect(ConnectThroughSocks(hostname, ssl ? port+1 : port, proxyaddr, proxyport), hostname, ssl);
+            return DoConnect(ConnectThroughSocks(hostname, ssl ? port+1 : port, proxyaddr, proxyport), hostname, ssl, username, supportsUpgrade);
         }
 
         protected void Dispose(bool dispose)

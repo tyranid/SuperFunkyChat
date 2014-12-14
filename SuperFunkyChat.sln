@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperFunkyChat", "SuperFunkyChat\SuperFunkyChat.csproj", "{61BEDE97-804B-4A95-AA6D-69B34E4F7342}"
 EndProject
@@ -12,6 +12,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileSigner", "FileSigner\FileSigner.csproj", "{6EF875A3-A4FC-4849-9765-6AAB04CBC5BA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Updater", "Updater\Updater.csproj", "{C60C8A68-9536-4611-848B-153E9575F3D3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperFunkyChatCLI", "SuperFunkyChatCLI\SuperFunkyChatCLI.csproj", "{6760EBC3-6030-47AD-BE88-10861DD58A38}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -81,6 +83,16 @@ Global
 		{C60C8A68-9536-4611-848B-153E9575F3D3}.Release|Mixed Platforms.Build.0 = Release|x86
 		{C60C8A68-9536-4611-848B-153E9575F3D3}.Release|x86.ActiveCfg = Release|x86
 		{C60C8A68-9536-4611-848B-153E9575F3D3}.Release|x86.Build.0 = Release|x86
+		{6760EBC3-6030-47AD-BE88-10861DD58A38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6760EBC3-6030-47AD-BE88-10861DD58A38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6760EBC3-6030-47AD-BE88-10861DD58A38}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{6760EBC3-6030-47AD-BE88-10861DD58A38}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{6760EBC3-6030-47AD-BE88-10861DD58A38}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6760EBC3-6030-47AD-BE88-10861DD58A38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6760EBC3-6030-47AD-BE88-10861DD58A38}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6760EBC3-6030-47AD-BE88-10861DD58A38}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{6760EBC3-6030-47AD-BE88-10861DD58A38}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{6760EBC3-6030-47AD-BE88-10861DD58A38}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
